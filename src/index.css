@@ -1,13 +1,19 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+.swiper-slide {
+  display: flex;
+  justify-content: center;
 }
-
-:root {
-  font-family: sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  --color-primary: #2c8166;
+.product-card {
+  width: 220px;
+  text-align: center;
+}
+.product-card img {
+  border-radius: 8px;
+  width: 100%;
+}
+.buy-btn {
+  background: #ff9900;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
 }
