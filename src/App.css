@@ -148,6 +148,27 @@ section h2 {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: rgb(73, 210, 245);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 10px;
+  z-index: 1000;
+  border-bottom: 1px solid #ef09c9;
+}
+.main-content {
+  margin-top: 30px; 
+  padding: 20px;
+}
+.swiper {
+  overflow: visible !important;
+}
 
 
 

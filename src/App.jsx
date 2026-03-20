@@ -24,6 +24,7 @@ export function App() {
         <Link to="/travel-gear">Travel Gear</Link>
       </nav>
 
+         <div className="main-content">
       <Routes>
         <Route path="/" element={<Marketplace />} />
         <Route path="/contact" element={<Contacts />} />
@@ -34,6 +35,7 @@ export function App() {
         <Route path="/laptops" element={<Laptops />} />
         <Route path="/travel-gear" element={<TravelGear />} />
       </Routes>
+          </div>
     </Router>
   );
 }
