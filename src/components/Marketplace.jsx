@@ -3,13 +3,13 @@ import { UserContext } from "../UserContext";
 import Register from "../components/Register";
 import Login from "../components/Login";
 import ListingCard from "../components/ListingCard";
-import listingsData from "../components/listingsData";
+import ListingsData from "../components/ListingsData";
 import ProductSlider from "../components/ProductSlider"; // Amazon slider
 import "../App.css"; // ensure your flex styles are included
 
 export default function Marketplace() {
   const { user, logout } = useContext(UserContext);
-  const [listings, setListings] = useState(listingsData);
+  const [listings, setListings] = useState(ListingsData);
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [search, setSearch] = useState("");
