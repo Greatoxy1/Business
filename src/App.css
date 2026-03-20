@@ -1,18 +1,25 @@
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background: rgb(156, 245, 73);
   display: flex;
-  justify-content: center;
-  padding: 15px;
-  background-color: lch(79.38% 74.58 96.25);
-  flex-wrap: wrap; /* wrap links on smaller screens */
+  flex-wrap: wrap;
+  overflow-x: auto;
+  gap: 10px;
+  align-items: center;
+   justify-content: space-between;
+  padding: 0 10px;
+  z-index: 1000;
+  border-bottom: 1px solid #ef09c9;
 }
-
 .navbar a {
-  color: #200cd3;
-  text-decoration: rgb(230, 134, 8);
-  margin: 0 20px;
-  font-weight: bold;
-  padding: 5px 0;
-  width:20px 0;
+  font-size: 14px;           /* 🔥 smaller text */
+  text-decoration: none;
+  color: #171010;
+  padding: 4px 6px;          /* compact */
 }
 
 .navbar a:hover {
@@ -39,16 +46,16 @@
   display:grid;
   flex-direction:column;
   align-items:center;
-  background: hsl(191, 90%, 52%);
+  background: hsl(193, 93%, 41%);
   border-radius: 15px;
   border: 2px solid #f5980c;
-  padding: 15px;
+  padding: 10px;
   text-align: center;
-  box-shadow: 0 10px  rgba(244, 8, 154, 0.1);
+  box-shadow: 0 10px  rgba(31, 222, 161, 0.1);
 }
 .product-card img {
   width: 100%;
-  height: 140px;        
+  height: 100px;        
   object-fit: cover;
   border-radius: 12px;
 }
@@ -65,12 +72,12 @@
 }
 
 section {
-  width:500px;
+  width:420px;
   margin: 10px 0;
 }
 
 section h2 {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   color: #333;
 }
 
@@ -87,11 +94,12 @@ section h2 {
 }
 /* Card container */
 .card {
-  border: 1px solid #f5980c;
+  display:grid;
+  border: 1px solid #f5a30c;
   border-radius: 12px;
   padding: 12px;
-  max-width: 260px;
-  background: #fff;
+  max-width: 250px;
+  background: #ffffff;
   transition: all 0.3s ease;
 }
 
@@ -148,22 +156,9 @@ section h2 {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: rgb(73, 210, 245);
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 0 10px;
-  z-index: 1000;
-  border-bottom: 1px solid #ef09c9;
-}
+
 .main-content {
-  margin-top: 30px; 
+  margin-top: 20px; 
   padding: 20px;
 }
 .swiper {
