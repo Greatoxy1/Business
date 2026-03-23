@@ -1,10 +1,9 @@
 import React from "react";
 
-export default function ListingCard({ item, addToCart, wishlist, setWishlist }) {
+export default function ListingCard({ item, addToCart, wishlist, setWishlist, checkoutSingleItem }) {
   
   const toggleWishlist = () => {
     const exists = wishlist.find((w) => w.id === item.id);
-
     if (exists) {
       setWishlist(wishlist.filter((w) => w.id !== item.id));
     } else {
@@ -14,16 +13,24 @@ export default function ListingCard({ item, addToCart, wishlist, setWishlist }) 
 
   return (
     <div className="card">
-  <img src={item.image} alt={item.title} className="card-img" />
+      {/* Image */}
+      <div className="card-img-wrapper">
+        <img src={item.image} alt={item.title} className="card-img" />
+      </div>
 
-  <h3 className="card-title">{item.title}</h3>
-  <p className="card-desc">{item.description}</p>
-  <p className="card-price">${item.price}</p>
+      {/* Title and Description */}
+      <h3 className="card-title">{item.title}</h3>
+      <p className="card-desc">{item.description}</p>
 
-  <div className="card-actions">
-    <button onClick={() => addToCart(item)}>Add to Cart</button>
-    <button onClick={toggleWishlist}>❤️</button>
-  </div>
-</div>
+      {/* Price */}
+      <p className="card-price">${item.price.toFixed(2)}</p>
+
+      {/* Actions */}
+      <div className="card-actions">
+        <button onClick={() => addToCart(item)}>Add to Cart</button>
+        <button onClick={() => checkoutSingleItem(item)}>Buy Now</button>
+        <button onClick={toggleWishlist}>{wishlist.find(w => w.id === item.id) ? "💖" : "🤍"}</button>
+      </div>
+    </div>
   );
 }

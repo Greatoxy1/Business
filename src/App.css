@@ -1,25 +1,23 @@
 .navbar {
-  position: fixed;
-  top: 0;
+  top: 10px;
   left: 0;
   width: 100%;
   height: auto;
-  background: rgb(156, 245, 73);
+  background: rgb(191, 235, 80);
   display: flex;
   flex-wrap: wrap;
-  overflow-x: auto;
   gap: 10px;
   align-items: center;
-   justify-content: space-between;
+  justify-content: space-between;
   padding: 0 10px;
   z-index: 1000;
-  border-bottom: 1px solid #ef09c9;
+  border-bottom: 2px solid #ef09c9;
 }
 .navbar a {
-  font-size: 14px;           /* 🔥 smaller text */
+  font-size: 14px;          
   text-decoration: none;
-  color: #171010;
-  padding: 4px 6px;          /* compact */
+  color: #6c16ce;
+  padding: 10px 30px;          
 }
 
 .navbar a:hover {
@@ -31,7 +29,7 @@
     flex-direction: column;
     align-items: center;
     background-color: hwb(36 0% 0%);
-    width: 30px
+    width: 20px
   }
   .navbar img{
     width: 25px;
@@ -46,8 +44,8 @@
   display:grid;
   flex-direction:column;
   align-items:center;
-  background: hsl(193, 93%, 41%);
-  border-radius: 15px;
+  background: hsl(312, 54%, 91%);
+  border-radius: 10px;
   border: 2px solid #f5980c;
   padding: 10px;
   text-align: center;
@@ -57,11 +55,10 @@
   width: 100%;
   height: 100px;        
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .buy-btn {
-  margin-top: 10px;
-  padding: 8px 12px;
+  padding: 1px 1px;
   background: #ff9900;
   color: white;
   text-decoration: none;
@@ -72,7 +69,7 @@
 }
 
 section {
-  width:420px;
+  width:400px;
   margin: 10px 0;
 }
 
@@ -95,26 +92,25 @@ section h2 {
 /* Card container */
 .card {
   display:grid;
-  border: 1px solid #f5a30c;
+  border: 2px solid #f5a30c;
   border-radius: 12px;
   padding: 12px;
   max-width: 250px;
-  background: #ffffff;
+  background: #5fbcf5;
   transition: all 0.3s ease;
 }
 
-/* Hover effect (Amazon-like) */
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(6, 18, 155, 0.1);
 }
 
 /* Image */
 .card-img {
   width: 100%;
-  height: 180px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 /* Text */
@@ -125,7 +121,7 @@ section h2 {
 
 .card-desc {
   font-size: 13px;
-  color: #555;
+  color: #100f0f;
 }
 
 .card-price {
@@ -133,7 +129,6 @@ section h2 {
   margin: 8px 0;
 }
 
-/* Buttons */
 .card-actions {
   display: flex;
   justify-content: space-between;
@@ -142,7 +137,7 @@ section h2 {
 .card-actions button {
   padding: 6px 10px;
   border: none;
-  background: hsl(190, 100%, 50%);
+  background: hsl(55, 74%, 49%);
   color: #2e11ea;
   border-radius: 6px;
   cursor: pointer;

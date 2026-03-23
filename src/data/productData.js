@@ -7,10 +7,10 @@ const productsData = {
     link:"https://amzn.to/4lxYpjk",
   },
     {
-    name:"C24 Ultra 5G Smartphone",
-    image:"https://m.media-amazon.com/images/I/61F5Pl9kkvL._AC_SY300_SX300_QL70_FMwebp_.jpg",
-    description:"C24 Ultra 5G Smartphone 16+512GB Unlocked Phone,48+108MP Zoom Camera，6800mAh 6.8 HD Screen Unlocked Cell PhoneAndroid 13.0,Face ID/Fingerprint Lock/GPS Phone,Built-in Pen (White)",
-    link:"https://amzn.to/4uAS371",
+    name:"JBL",
+    image:"https://m.media-amazon.com/images/I/81PJbM6mnzL._AC_UY327_FMwebp_QL65_.jpg",
+    description:"Portable Bluetooth Karaoke Speaker with 2 Wireless Microphones,",
+    link:"https://amzn.to/3PqqnSa",
   },
     {
     name:"SAMSUNG Galaxy S25 Ultra",
@@ -43,10 +43,10 @@ const productsData = {
     link:"https://amzn.to/4beUcO4",
   },
     {
-    name:"Agbada outfit",
-    image:"https://m.media-amazon.com/images/I/713hIBw6QGL._AC_SY550_.jpg",
-    description:"",
-    link:"https://amzn.to/4sMUT6Z",
+    name:"Couple outfit",
+    image:"https://m.media-amazon.com/images/I/71CaUkqoPzL._AC_UL480_FMwebp_QL65_.jpg",
+    description:"African Princess Tails Dresses for Women Matching Couple Outfits Dashiki Men Top and Pant Sets Wedding",
+    link:"https://amzn.to/4dDKGpa",
   },
     {
     name:"Women's 2 Piece Outfits",
@@ -75,10 +75,10 @@ const productsData = {
       link: "https://amzn.to/4rvZmdf"
     },
     {
-      name: "OLEVS Watches Men Waterproof ",
-      image: "https://m.media-amazon.com/images/I/71Br5PpDVBL._AC_UL480_FMwebp_QL65_.jpg",
-      description: "Luxury Big  Mens Watch Stainless Steel Quartz Analog Dress Watches for Men",
-      link: "https://amzn.to/3PHqbOo"
+      name: "Boots for Men Women ",
+      image: "https://m.media-amazon.com/images/I/81iO5YUq-1L._AC_SY500_.jpg",
+      description: "Boots for Men Women Comfortable Lightweight Work Boots for Men Slip Resistant High Top Steel",
+      link: "https://amzn.to/3Pqt5qO"
     },
     {
       name: "Smartwatch for iPhone & Android Bluetooth",

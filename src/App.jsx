@@ -7,7 +7,7 @@ import Cameras from "./pages/Cameras";
 import Laptops from "./pages/Laptops";
 import TravelGear from "./pages/TravelGear";
 import Trending from "./pages/Trending";
-import "./App.css"; 
+import "./App.css";
 
 export function App() {
   return (
@@ -24,18 +24,18 @@ export function App() {
         <Link to="/travel-gear">Travel Gear</Link>
       </nav>
 
-         <div className="main-content">
-      <Routes>
-        <Route path="/" element={<Marketplace />} />
-        <Route path="/contact" element={<Contacts />} />
-        <Route path="/business" element={<Business />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="/tech-gadgets" element={<TechGadgets />} />
-        <Route path="/cameras" element={<Cameras />} />
-        <Route path="/laptops" element={<Laptops />} />
-        <Route path="/travel-gear" element={<TravelGear />} />
-      </Routes>
-          </div>
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<Marketplace />} />
+          <Route path="/contact" element={<Contacts />} />
+          <Route path="/business" element={<Business />} />
+          <Route path="/trending" element={<Trending />} />
+          <Route path="/tech-gadgets" element={<TechGadgets />} />
+          <Route path="/cameras" element={<Cameras />} />
+          <Route path="/laptops" element={<Laptops />} />
+          <Route path="/travel-gear" element={<TravelGear />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

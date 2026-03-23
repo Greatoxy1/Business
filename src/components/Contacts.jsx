@@ -18,6 +18,8 @@ export default function Contacts() {
           <br></br>
           <a href="https://www.facebook.com/profile.php?id=61587557807005">Join our facebook chanel</a>
           <br></br>
+          <a href="https://t.me/globbalnews1">Follow us on Telegram</a>
+          <br></br>
         <Link to="/">
           <button className="btn">Back to Home</button>
         </Link>
