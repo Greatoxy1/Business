@@ -1,15 +1,26 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
+if (!process.env.MONGO_URI) {
+  console.error("❌ MONGO_URI is missing");
+  process.exit(1);
+}
 
-mongoose.connect("mongodb://127.0.0.1:27017/marketplace")
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.error("MongoDB error:", err);
+    process.exit(1);
+  });
 
 const listingSchema = new mongoose.Schema({
   title: String,
@@ -30,10 +41,6 @@ app.get("/listings/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.get("/listings", async (req, res) => {
-  const listings = await Listing.find();
-  res.json(listings);
-});
 
 app.post("/add-listing", async (req, res) => {
   const newListing = new Listing(req.body);
@@ -41,7 +48,6 @@ app.post("/add-listing", async (req, res) => {
   res.json(newListing);
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -91,16 +97,6 @@ app.get("/listings", async (req, res) => {
   }
 });
 
-// 👉 Add new listing
-app.post("/add-listing", async (req, res) => {
-  try {
-    const newListing = new Listing(req.body);
-    await newListing.save();
-    res.json(newListing);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 // 👉 Delete listing (optional)
 app.delete("/listing/:id", async (req, res) => {
@@ -111,14 +107,16 @@ app.delete("/listing/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+app.get("/", (req, res) => {
+  res.send("API is running ✅");
+});
 
 // =========================
 // ✅ START SERVER
 // =========================
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000 ;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
