@@ -105,16 +105,16 @@ const productsData = {
       link: "https://amzn.to/4rvZmdf"
     },
     {
-      name: "4 in 1 Multi Charging Cable",
-      image: "https://m.media-amazon.com/images/I/71-2VzTSQsL._SL1500_.jpg",
-      description: "Tangle Free USB C Car Charger Cable Nylon Braided with 2 USB-C/IP/Micro, Travel Charging Cords for iPhone",
-      link: "https://amzn.to/4buzdFX"
+      name: "JBL Charge 6 - Portable",
+      image: "https://m.media-amazon.com/images/I/71OAC2L15TL._AC_SL1500_.jpg",
+      description: "Portable Waterproof & Drop-Proof Bluetooth Speaker, Bold JBL Pro Sound with AI Sound Boost, 28Hrs",
+      link: "https://amzn.to/4dPzaHp"
     },
     {
-      name: "Weather Radio",
-      image: "https://m.media-amazon.com/images/I/71bHkeY6c2L._AC_SL1500_.jpg",
-      description: "20000mAh/ 74000mWh Hand Crank Emergency Radio, AM/FM/NOAA Weather Radio, Battery Powered Solar Radio with USB Phone Charger, Reading Lamp Flashlight",
-      link: "https://amzn.to/4bhLPBq"
+      name: "Tory Burch Women's Kira",
+      image: "https://m.media-amazon.com/images/I/61xUU-eSlXL._AC_SY606_.jpg",
+      description: "Tory Burch Women's Kira Two Band Sport Sandals",
+      link: "https://amzn.to/3O9UexT"
     },
         
 
@@ -140,10 +140,10 @@ const productsData = {
       link: "https://amzn.to/4uIzNsv"
     },
     {
-      name: "Video Camera, Camcorder 4K",
-      image: "https://m.media-amazon.com/images/I/61p6-Bd2J0L._AC_SL1280_.jpg",
-      description: "Best camera for journalists abd content creaters",
-      link: "https://amzn.to/4lxTkr8"
+      name: "Common Stitch 3 Pack Fleece Joggers for Women",
+      image: "https://m.media-amazon.com/images/I/71W3rXnap0L._AC_SX522_.jpg",
+      description: "Common Stitch 3 Pack Fleece Joggers for Women — Deep Pockets, Slim Fit, Elastic Drawstring Waist",
+      link: "https://amzn.to/3NtTfbK"
     },
     {
       name: "8K Video Camera Camcorder",
@@ -170,10 +170,10 @@ const productsData = {
       link: "https://amzn.to/4sMtOks"
     },
     {
-      name: "4K 30FPS Vlogging Camera",
-      image: "https://m.media-amazon.com/images/I/71PpwlWReaL._AC_UY327_FMwebp_QL65_.jpg",
-      description: "",
-      link: "https://amzn.to/4slCxue"
+      name: "OEAK Womens Deep V Bras Wireless",
+      image: "https://m.media-amazon.com/images/I/71COxEYxmGL._AC_SX569_.jpg",
+      description: "OEAK Womens Deep V Bras Wireless Comfortable Bra Supportive No Underwire Bras Tshirt Push Up Bralettes Plunge Seamless Bra",
+      link: "https://amzn.to/4tiCUG4"
     },
     {
       name: "Hiseeu Wireless Pro WiFi Security Camera",
@@ -199,10 +199,10 @@ const productsData = {
       link: "https://amzn.to/4bOrjZ7"
     },
     {
-      name: "ASUS Vivobook",
-      image: "https://m.media-amazon.com/images/I/71Os2Kn40pL._AC_SL1500_.jpg",
-      description: "Laptop, AMD Ryzen 5 7520U, 8GB, 512GB, Windows 11 Home, Cool Silver, Military Grade Durability, Fast Charging, Webcam Shield, E1504FA-AS54",
-      link: "https://amzn.to/4cUMjyt"
+      name: "Shoes | Stylish Canvas",
+      image: "https://m.media-amazon.com/images/I/81UvzLQV8LL._AC_SX500_.jpg",
+      description: "WHITIN Men's Wide Barefoot Shoes | Stylish Canvas Minimalist Sneakers | Zero Drop Sole",
+      link: "https://amzn.to/41yEnvP"
     },
     {
       name: "Business Laptop ",

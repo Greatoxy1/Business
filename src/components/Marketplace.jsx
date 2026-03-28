@@ -23,7 +23,7 @@ export default function Marketplace() {
   const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/listings")
+    axios.get("https://business-3-zwsk.onrender.com/listings")
       .then((res) => setListings(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -46,7 +46,7 @@ export default function Marketplace() {
       };
       try {
         const res = await axios.post(
-          "http://localhost:5000/add-listing",
+          "https://business-3-zwsk.onrender.com/add-listing",
           newItem
         );
 
