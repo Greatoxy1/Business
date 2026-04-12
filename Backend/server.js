@@ -6,10 +6,12 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
+
 app.use(cors({
   origin: "*"
 }));
-app.use(express.json());
 if (!process.env.MONGO_URI) {
   console.error("❌ MONGO_URI is missing");
   process.exit(1);
@@ -41,11 +43,15 @@ app.get("/listings/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.post("/add-listing", async (req, res) => {
-  const newListing = new Listing(req.body);
-  await newListing.save();
-  res.json(newListing);
+  try {
+    const newListing = new Listing(req.body);
+    await newListing.save();
+    res.json(newListing);
+  } catch (err) {
+    console.error("Add listing error:", err);
+    res.status(500).json({ error: "Failed to add listing" });
+  }
 });
 
 

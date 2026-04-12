@@ -27,44 +27,71 @@ export default function Marketplace() {
       .then((res) => setListings(res.data))
       .catch((err) => console.error(err));
   }, []);
-
-  const addListings = () => {
-    if (!user) return alert("Login first");
-    if (!newTitle || !newPrice || !newImage) return alert("Fill all fields");
-
+  const compressImage = (file) => {
+  return new Promise((resolve) => {
     const reader = new FileReader();
 
-    reader.onload = async () => {
-      const newItem = {
-        title: newTitle,
-        description: newDescription,
-        price: parseFloat(newPrice),
-        image: reader.result,
-        userId: user.id,
-        userName: user.username,
-        category: "Custom",
+    reader.readAsDataURL(file);
+
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+
+        const MAX_WIDTH = 500;
+        const scaleSize = MAX_WIDTH / img.width;
+
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+
+        resolve(compressedBase64);
       };
-      try {
-        const res = await axios.post(
-          "https://business-3-zwsk.onrender.com/add-listing",
-          newItem
-        );
+    };
+  });
+};
 
-        // ✅ update UI
-        setListings((prev) => [res.data, ...prev]);
+const addListings = async () => {
+  if (!user) return alert("Login first");
+  if (!newTitle || !newPrice || !newImage) return alert("Fill all fields");
 
-        // clear form
-        setNewTitle("");
-        setNewDescription("");
-        setNewPrice("");
-        setNewImage(null);
-      } catch (err) {
-        console.error("Error adding listing:", err);
-      }
+  try {
+    const compressedImage = await compressImage(newImage);
+
+    const newItem = {
+      title: newTitle,
+      description: newDescription,
+      price: parseFloat(newPrice),
+      image: compressedImage, // ✅ compressed
+      userId: user.id || user._id,
+      userName: user.username,
+      category: "Custom",
     };
 
-    reader.readAsDataURL(newImage);
-  };
+    const res = await axios.post(
+      "https://business-3-zwsk.onrender.com/add-listing",
+      newItem
+    );
+
+    setListings((prev) => [res.data, ...prev]);
+
+    // clear form
+    setNewTitle("");
+    setNewDescription("");
+    setNewPrice("");
+    setNewImage(null);
+
+  } catch (err) {
+    console.error("Error adding listing:", err);
+    alert("Upload failed");
+  }
+};
 
   const addToCart = (item) => {
     const existing = cart.find((c) => c.id === item.id);
@@ -88,7 +115,7 @@ export default function Marketplace() {
     const phone = "4915218006238";
     const customerName = user?.username || "Guest";
 
-    let message = `Hello 👋\n\n`;
+    let message = `Hello i want to buy this product 👋\n\n`;
     message += `🛒 *Cart Order*\n\n`;
     message += `👤 Name: ${customerName}\n\n`;
 
@@ -110,7 +137,7 @@ export default function Marketplace() {
 
     const customerName = user?.username || "Guest";
 
-    let message = `Hello 👋\n\n`;
+    let message = `Hello i want to buy this product 👋\n\n`;
     message += `🛒 *New Order Request*\n\n`;
     message += `👤 Name: ${customerName}\n`;
     message += `📦 Item: ${item.title}\n`;
@@ -148,8 +175,8 @@ export default function Marketplace() {
         </div>
       )}
       {user && (
-        <div style={{ margin: "20px 0", border: "1px solid #ccc", padding: 10 }}>
-          <h3>Add a New Listing</h3>
+        <div style={{ margin: "20px 0", border: "2px solid #c9167e", padding: 10 }}>
+          <h3>Post your product</h3>
 
           <input
             placeholder="Title"
@@ -186,7 +213,7 @@ export default function Marketplace() {
           )}
 
           <button onClick={addListings} style={{ display: "block", marginTop: 10 }}>
-            Add Listing
+            Add Product
           </button>
         </div>
       )}
