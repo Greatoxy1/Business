@@ -32,6 +32,7 @@ const listingSchema = new mongoose.Schema({
   user: String,
   category: String,
   approved: Boolean,
+  phone: String, 
 }, { timestamps: true });
 
 const Listing = mongoose.model("Listings", listingSchema);
@@ -59,6 +60,11 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
+  country: String,
+  city: String,
+  town: String,
+  avatar: String,   
+  bio: String, 
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
@@ -67,9 +73,9 @@ const User = mongoose.model("User", userSchema);
 // =========================
 app.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password , country, city, town} = req.body;
 
-    const user = new User({ username, email, password });
+    const user = new User({ username, email, password, country, city, town });
     await user.save();
 
     res.json(user);
@@ -77,7 +83,10 @@ app.post("/register", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+app.get("/debug-users", async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+});
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -89,6 +98,33 @@ app.post("/login", async (req, res) => {
     }
 
     res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/profile/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.put("/profile/:id", async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    ).select("-password");
+
+    res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

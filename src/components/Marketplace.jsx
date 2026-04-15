@@ -4,6 +4,8 @@ import Register from "../components/Register";
 import Login from "../components/Login";
 import ListingCard from "../components/ListingCard";
 import ProductSlider from "../components/ProductSlider";
+import Profile from "../components/Profile";
+
 import "../App.css";
 
 import { useEffect } from "react";
@@ -16,7 +18,7 @@ export default function Marketplace() {
   const [wishlist, setWishlist] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-
+  const [phone, setPhone] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newPrice, setNewPrice] = useState("");
@@ -28,70 +30,72 @@ export default function Marketplace() {
       .catch((err) => console.error(err));
   }, []);
   const compressImage = (file) => {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
 
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
 
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
 
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
 
-        const MAX_WIDTH = 500;
-        const scaleSize = MAX_WIDTH / img.width;
+          const MAX_WIDTH = 500;
+          const scaleSize = MAX_WIDTH / img.width;
 
-        canvas.width = MAX_WIDTH;
-        canvas.height = img.height * scaleSize;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
 
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
 
-        resolve(compressedBase64);
+          resolve(compressedBase64);
+        };
       };
-    };
-  });
-};
+    });
+  };
 
-const addListings = async () => {
-  if (!user) return alert("Login first");
-  if (!newTitle || !newPrice || !newImage) return alert("Fill all fields");
+  const addListings = async () => {
+    if (!user) return alert("Login first");
+    if (!newTitle || !newPrice || !newImage) return alert("Fill all fields");
 
-  try {
-    const compressedImage = await compressImage(newImage);
+    try {
+      const compressedImage = await compressImage(newImage);
 
-    const newItem = {
-      title: newTitle,
-      description: newDescription,
-      price: parseFloat(newPrice),
-      image: compressedImage, // ✅ compressed
-      userId: user.id || user._id,
-      userName: user.username,
-      category: "Custom",
-    };
+      const newItem = {
+        title: newTitle,
+        description: newDescription,
+        price: parseFloat(newPrice),
+        image: compressedImage, // ✅ compressed
+        userId: user.id || user._id,
+        userName: user.username,
+        category: "Custom",
+        phone: phone,
+      };
 
-    const res = await axios.post(
-      "https://business-3-zwsk.onrender.com/add-listing",
-      newItem
-    );
+      const res = await axios.post(
+        "https://business-3-zwsk.onrender.com/add-listing",
+        newItem
+      );
 
-    setListings((prev) => [res.data, ...prev]);
+      setListings((prev) => [res.data, ...prev]);
 
-    // clear form
-    setNewTitle("");
-    setNewDescription("");
-    setNewPrice("");
-    setNewImage(null);
+      // clear form
+      setNewTitle("");
+      setNewDescription("");
+      setNewPrice("");
+      setNewImage(null);
+      setPhone("");
 
-  } catch (err) {
-    console.error("Error adding listing:", err);
-    alert("Upload failed");
-  }
-};
+    } catch (err) {
+      console.error("Error adding listing:", err);
+      alert("Upload failed");
+    }
+  };
 
   const addToCart = (item) => {
     const existing = cart.find((c) => c.id === item.id);
@@ -107,12 +111,22 @@ const addListings = async () => {
   const removeItem = (item) => setCart(cart.filter((c) => c.id !== item.id));
 
   const checkoutWhatsApp = () => {
-    if (cart.length === 0) {
-      alert("Cart empty");
+    if (cart.length === 0) return alert("Cart empty");
+
+    const firstSellerPhone = cart[0].phone;
+
+    if (!firstSellerPhone) {
+      alert("Seller phone missing");
       return;
     }
 
-    const phone = "4915218006238";
+    const sameSeller = cart.every(item => item.phone === firstSellerPhone);
+
+    if (!sameSeller) {
+      alert("Cart contains items from different sellers");
+      return;
+    }
+
     const customerName = user?.username || "Guest";
 
     let message = `Hello i want to buy this product 👋\n\n`;
@@ -128,12 +142,16 @@ const addListings = async () => {
     message += `Please confirm my order.`;
 
     window.open(
-      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+      `https://wa.me/${firstSellerPhone}?text=${encodeURIComponent(message)}`,
       "_blank"
     );
   };
+
   const checkoutSingleItem = (item) => {
-    const phone = "4915218006238";
+    if (!item.phone) {
+      alert("Seller has no WhatsApp number");
+      return;
+    }
 
     const customerName = user?.username || "Guest";
 
@@ -146,7 +164,7 @@ const addListings = async () => {
     message += `Please confirm availability. Thank you!`;
 
     window.open(
-      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+      `https://wa.me/${item.phone}?text=${encodeURIComponent(message)}`,
       "_blank"
     );
   };
@@ -177,6 +195,12 @@ const addListings = async () => {
       {user && (
         <div style={{ margin: "20px 0", border: "2px solid #c9167e", padding: 10 }}>
           <h3>Post your product</h3>
+
+          <input
+            placeholder="WhatsApp Number (e.g. 4915218006238)"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
 
           <input
             placeholder="Title"
