@@ -96,6 +96,21 @@ export default function Marketplace() {
       alert("Upload failed");
     }
   };
+  const deleteListing = async (id) => {
+  try {
+    await axios.delete(
+      `https://business-3-zwsk.onrender.com/listing/${id}`,
+      {
+        data: { userId: user.id || user._id }
+      }
+    );
+
+    setListings((prev) => prev.filter((item) => item._id !== id));
+  } catch (err) {
+    console.error("Delete failed:", err);
+    alert("Failed to delete listing");
+  }
+};
 
   const addToCart = (item) => {
     const existing = cart.find((c) => c.id === item.id);
@@ -109,6 +124,15 @@ export default function Marketplace() {
   };
 
   const removeItem = (item) => setCart(cart.filter((c) => c.id !== item.id));
+  
+  const sendMessage = async (item) => {
+  await axios.post("https://business-3-zwsk.onrender.com/send-message", {
+    senderId: user._id,
+    receiverId: item.userId,
+    text: "Hi, I'm interested in your product",
+    listingId: item._id,
+  });
+};
 
   const checkoutWhatsApp = () => {
     if (cart.length === 0) return alert("Cart empty");
@@ -194,6 +218,7 @@ export default function Marketplace() {
       )}
       {user && (
         <div style={{ margin: "20px 0", border: "2px solid #c9167e", padding: 10 }}>
+
           <h3>Post your product</h3>
 
           <input
@@ -269,7 +294,9 @@ export default function Marketplace() {
               user={user}
               wishlist={wishlist}
               setWishlist={setWishlist}
-              checkoutSingleItem={checkoutSingleItem} // ✅ ADD THIS
+              checkoutSingleItem={checkoutSingleItem}
+              deleteListing={deleteListing} 
+               sendMessage={sendMessage}  // ✅ ADD THIS
             />
           </div>
         ))}
@@ -289,7 +316,9 @@ export default function Marketplace() {
       ))}
 
       <button onClick={checkoutWhatsApp}>Checkout via WhatsApp</button>
-
+      <button onClick={() => sendMessage(item)}>
+  Message Seller
+</button>
 
       {/* Wishlist */}
       <h2>Wishlist</h2>

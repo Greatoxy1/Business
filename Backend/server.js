@@ -2,9 +2,23 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
+import http from "http";
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server,{
+  cors: { origin: "*" }
+});
+
+io.on("connection", (socket) => {
+  console.log("User connected");
+
+  socket.on("send_message", (data) => {
+    io.emit("receive_message", data);
+  });
+});
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
@@ -55,6 +69,24 @@ app.post("/add-listing", async (req, res) => {
   }
 });
 
+const messageSchema = new mongoose.Schema({
+  senderId: String,
+  receiverId: String,
+  text: String,
+  listingId: String,
+}, { timestamps: true });
+
+const Message = mongoose.model("Message", messageSchema);
+
+app.post("/send-message", async (req, res) => {
+  try {
+    const msg = new Message(req.body);
+    await msg.save();
+    res.json(msg);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -139,12 +171,51 @@ app.get("/listings", async (req, res) => {
   }
 });
 
-
-// 👉 Delete listing (optional)
-app.delete("/listing/:id", async (req, res) => {
+ app.put("/edit-listing/:id", async (req, res) => {
   try {
-    await Listing.findByIdAndDelete(req.params.id);
+    const { userId, title, description, price } = req.body;
+
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    if (listing.userId !== userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    listing.title = title;
+    listing.description = description;
+    listing.price = price;
+
+    await listing.save();
+
+    res.json(listing);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/delete-listing/:id", async (req, res) => {
+  try {
+    const { userId } = req.body; // sent from frontend
+
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    // 🔒 Only owner can delete
+    if (listing.userId !== userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await listing.deleteOne();
+
     res.json({ message: "Deleted successfully" });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -159,6 +230,6 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000 ;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
