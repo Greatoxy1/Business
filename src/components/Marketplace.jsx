@@ -115,27 +115,54 @@ export default function Marketplace() {
     }
   };
 
-  const addToCart = (item) => {
-    const existing = cart.find((c) => c.id === item.id);
-    if (existing)
-      setCart(
-        cart.map((c) =>
-          c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c
-        )
-      );
-    else setCart([...cart, { ...item, quantity: 1 }]);
-  };
+ const addToCart = (item) => {
+  const existing = cart.find((c) => c._id === item._id);
 
-  const removeItem = (item) => setCart(cart.filter((c) => c.id !== item.id));
+  if (existing) {
+    setCart(
+      cart.map((c) =>
+        c._id === item._id
+          ? { ...c, quantity: c.quantity + 1 }
+          : c
+      )
+    );
+  } else {
+    setCart([...cart, { ...item, quantity: 1 }]);
+  }
+};
 
-  const sendMessage = async (item) => {
-    await axios.post("https://business-3-zwsk.onrender.com/send-message", {
-      senderId: user?.id || user?._id,
+const removeItem = (item) =>
+  setCart(cart.filter((c) => c._id !== item._id));
+
+ const sendMessage = async (item) => {
+  if (!user) {
+    alert("Please login first");
+    return;
+  }
+
+  try {
+    const payload = {
+      senderId: user._id,
       receiverId: item.userId,
       text: "Hi, I'm interested in your product",
       listingId: item._id,
-    });
-  };
+    };
+
+    console.log(payload);
+
+    const res = await axios.post(
+      "https://business-3-zwsk.onrender.com/send-message",
+      payload
+    );
+
+    console.log(res.data);
+
+    alert("Message sent!");
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert("Failed to send message");
+  }
+};
 
   const checkoutWhatsApp = () => {
     if (cart.length === 0) return alert("Cart empty");

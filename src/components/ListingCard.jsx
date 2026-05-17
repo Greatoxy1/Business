@@ -29,21 +29,26 @@ useEffect(() => {
 
   return () => socket.off("receive_message");
 }, [item._id]);
+
 useEffect(() => {
   const fetchMessages = async () => {
+    if (!user || !item.userId) return;
+
     try {
       const res = await axios.get(
-        `https://business-3-zwsk.onrender.com/messages/${item._id}`
+        `https://business-3-zwsk.onrender.com/messages/${item._id}/${user._id}/${item.userId}`
       );
 
       setMessages(res.data);
+
     } catch (err) {
       console.error("Failed to load messages:", err);
     }
   };
 
   fetchMessages();
-}, [item._id]);
+
+}, [item._id, item.userId, user]);
 
 useEffect(() => {
   if (user) {
@@ -52,27 +57,42 @@ useEffect(() => {
 }, [user]);
 
 
-const sendMessage =async () => {
-  if (!user) return alert("Login first");
+const sendMessage = async () => {
+  if (!user) {
+    alert("Login first");
+    return;
+  }
+
   if (!messageText.trim()) return;
 
-  const msg = {
-    senderId: user?.id || user?._id,
-    receiverId: item.userId,
-    text: messageText,
-    listingId: item._id,
-  };
-   // ✅ save to DB
-  await axios.post(
-    "https://business-3-zwsk.onrender.com/send-message",
-    msg
-  );
+  if (user._id === item.userId) {
+    alert("You cannot message yourself");
+    return;
+  }
 
-  socket.emit("send_message", msg);
+  try {
+    const msg = {
+      senderId: user._id,
+      receiverId: item.userId,
+      text: messageText,
+      listingId: item._id,
+    };
 
-  // show instantly
-  setMessages((prev) => [...prev, msg]);
-  setMessageText("");
+    // ONLY use API
+    const res = await axios.post(
+      "https://business-3-zwsk.onrender.com/send-message",
+      msg
+    );
+
+    // update instantly
+    setMessages((prev) => [...prev, res.data]);
+
+    setMessageText("");
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to send message");
+  }
 };
 
   const toggleWishlist = () => {

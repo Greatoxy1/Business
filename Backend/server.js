@@ -146,21 +146,7 @@ app.get("/debug-users", async (req, res) => {
   const users = await User.find();
   res.json(users);
 });
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
-    const user = await User.findOne({ email, password });
-
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 app.get("/profile/:id", async (req, res) => {
   try {
@@ -263,6 +249,46 @@ app.delete("/delete-listing/:id", async (req, res) => {
 });
 app.get("/", (req, res) => {
   res.send("API is running ✅");
+});
+
+app.post("/send-message", async (req, res) => {
+  try {
+    const { senderId, receiverId, text, listingId } = req.body;
+
+    if (!senderId || !receiverId || !text || !listingId) {
+      return res.status(400).json({
+        message: "Missing required fields"
+      });
+    }
+
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      text,
+      listingId,
+    });
+
+    await newMessage.save();
+
+    // Send realtime message if receiver online
+    const receiverSocketId = onlineUsers.get(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit(
+        "receive_message",
+        newMessage
+      );
+    }
+
+    res.json(newMessage);
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      error: err.message
+    });
+  }
 });
 
 // =========================
