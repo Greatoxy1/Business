@@ -24,11 +24,14 @@ export default function Marketplace() {
   const [newPrice, setNewPrice] = useState("");
   const [newImage, setNewImage] = useState(null);
 
+
   useEffect(() => {
     axios.get("https://business-3-zwsk.onrender.com/listings")
       .then((res) => setListings(res.data))
       .catch((err) => console.error(err));
   }, []);
+
+
   const compressImage = (file) => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -97,20 +100,20 @@ export default function Marketplace() {
     }
   };
   const deleteListing = async (id) => {
-  try {
-    await axios.delete(
-      `https://business-3-zwsk.onrender.com/listing/${id}`,
-      {
-        data: { userId: user.id || user._id }
-      }
-    );
+    try {
+      await axios.delete(
+        `https://business-3-zwsk.onrender.com/listing/${id}`,
+        {
+          data: { userId: user.id || user._id }
+        }
+      );
 
-    setListings((prev) => prev.filter((item) => item._id !== id));
-  } catch (err) {
-    console.error("Delete failed:", err);
-    alert("Failed to delete listing");
-  }
-};
+      setListings((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete listing");
+    }
+  };
 
   const addToCart = (item) => {
     const existing = cart.find((c) => c.id === item.id);
@@ -124,15 +127,15 @@ export default function Marketplace() {
   };
 
   const removeItem = (item) => setCart(cart.filter((c) => c.id !== item.id));
-  
+
   const sendMessage = async (item) => {
-  await axios.post("https://business-3-zwsk.onrender.com/send-message", {
-    senderId: user._id,
-    receiverId: item.userId,
-    text: "Hi, I'm interested in your product",
-    listingId: item._id,
-  });
-};
+    await axios.post("https://business-3-zwsk.onrender.com/send-message", {
+      senderId: user?.id || user?._id,
+      receiverId: item.userId,
+      text: "Hi, I'm interested in your product",
+      listingId: item._id,
+    });
+  };
 
   const checkoutWhatsApp = () => {
     if (cart.length === 0) return alert("Cart empty");
@@ -222,24 +225,37 @@ export default function Marketplace() {
           <h3>Post your product</h3>
 
           <input
-            placeholder="WhatsApp Number (e.g. 4915218006238)"
+            id="phone"
+            name="phone"
+            placeholder="WhatsApp Number"
             value={phone}
+            autoComplete="tel"
+
             onChange={(e) => setPhone(e.target.value)}
           />
 
           <input
+            id="title"
+            name="title"
             placeholder="Title"
             value={newTitle}
+            autoComplete="off"
+
             onChange={(e) => setNewTitle(e.target.value)}
           />
 
           <input
+            id="description"
+            name="description"
             placeholder="Description"
             value={newDescription}
             onChange={(e) => setNewDescription(e.target.value)}
           />
 
           <input
+
+            id="price"
+            name="price"
             placeholder="Price"
             type="number"
             value={newPrice}
@@ -247,6 +263,8 @@ export default function Marketplace() {
           />
 
           <input
+            id="image"
+            name="image"
             type="file"
             accept="image/*"
             onChange={(e) => setNewImage(e.target.files[0])}
@@ -295,8 +313,8 @@ export default function Marketplace() {
               wishlist={wishlist}
               setWishlist={setWishlist}
               checkoutSingleItem={checkoutSingleItem}
-              deleteListing={deleteListing} 
-               sendMessage={sendMessage}  // ✅ ADD THIS
+              deleteListing={deleteListing}
+              sendMessage={sendMessage}  // ✅ ADD THIS
             />
           </div>
         ))}
@@ -316,9 +334,7 @@ export default function Marketplace() {
       ))}
 
       <button onClick={checkoutWhatsApp}>Checkout via WhatsApp</button>
-      <button onClick={() => sendMessage(item)}>
-  Message Seller
-</button>
+
 
       {/* Wishlist */}
       <h2>Wishlist</h2>
