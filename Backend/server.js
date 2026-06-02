@@ -80,14 +80,55 @@ app.get("/listings/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 app.post("/add-listing", async (req, res) => {
   try {
-    const newListing = new Listing(req.body);
+    const {
+      title,
+      description,
+      price,
+      image,
+      userId,
+      userName,
+      phone,
+      category
+    } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({
+        message: "You must be logged in to post a listing"
+      });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    const newListing = new Listing({
+      title,
+      description,
+      price,
+      image,
+      userId,
+      userName,
+      phone,
+      category,
+    });
+
     await newListing.save();
+
     res.json(newListing);
+
   } catch (err) {
     console.error("Add listing error:", err);
-    res.status(500).json({ error: "Failed to add listing" });
+
+    res.status(500).json({
+      error: err.message
+    });
   }
 });
 
@@ -252,43 +293,39 @@ app.get("/", (req, res) => {
 });
 
 app.post("/send-message", async (req, res) => {
-  try {
-    const { senderId, receiverId, text, listingId } = req.body;
+  console.log("BODY:", req.body);
 
-    if (!senderId || !receiverId || !text || !listingId) {
-      return res.status(400).json({
-        message: "Missing required fields"
-      });
-    }
+  const { senderId, receiverId, text, listingId } = req.body;
 
-    const newMessage = new Message({
-      senderId,
-      receiverId,
-      text,
-      listingId,
-    });
-
-    await newMessage.save();
-
-    // Send realtime message if receiver online
-    const receiverSocketId = onlineUsers.get(receiverId);
-
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit(
-        "receive_message",
-        newMessage
-      );
-    }
-
-    res.json(newMessage);
-
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
-      error: err.message
+  if (!senderId || !receiverId || !text || !listingId) {
+    return res.status(400).json({
+      message: "Missing required fields",
+      received: {
+        senderId,
+        receiverId,
+        text,
+        listingId,
+      },
     });
   }
+
+  // rest of code...
+});
+
+
+app.get("/debug-listings", async (req, res) => {
+  const listings = await Listing.find();
+  res.json(listings);
+});
+app.get("/fix-listing", async (req, res) => {
+  await Listing.findByIdAndUpdate(
+    "69c2ee02225f11d7b1d093e8",
+    {
+      userId: "69e493b9c2079493fb5d584b"
+    }
+  );
+
+  res.send("Updated");
 });
 
 // =========================

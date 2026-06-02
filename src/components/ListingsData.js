@@ -28,6 +28,7 @@ const listingsData = [
     image:"/assets/images/trk.png",
     description:"Iveco Truck 2010 model in perfect condition",
     price:"6500",
+    message:"still available"
   },
   {
     id: 1,

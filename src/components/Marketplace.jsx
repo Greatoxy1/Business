@@ -79,6 +79,7 @@ export default function Marketplace() {
         category: "Custom",
         phone: phone,
       };
+      
 
       const res = await axios.post(
         "https://business-3-zwsk.onrender.com/add-listing",
@@ -99,10 +100,13 @@ export default function Marketplace() {
       alert("Upload failed");
     }
   };
+
+  
+  
   const deleteListing = async (id) => {
     try {
       await axios.delete(
-        `https://business-3-zwsk.onrender.com/listing/${id}`,
+        `https://business-3-zwsk.onrender.com/delete-listing/${id}`,
         {
           data: { userId: user.id || user._id }
         }
@@ -134,35 +138,46 @@ export default function Marketplace() {
 const removeItem = (item) =>
   setCart(cart.filter((c) => c._id !== item._id));
 
- const sendMessage = async (item) => {
-  if (!user) {
-    alert("Please login first");
-    return;
-  }
+const sendMessage = async (item) => {
+  console.log("USER FULL:", user);
+  console.log("ITEM FULL:", item);
+
+  const senderId = user?._id;
+  const receiverId = item?.userId;
+  const listingId = item?._id;
+
+  const payload = {
+    senderId,
+    receiverId,
+    text: "Hi, I'm interested in your product",
+    listingId,
+  };
+
+  console.log("FINAL PAYLOAD:", payload);
+
+  if (!senderId || !receiverId || !listingId) {
+  console.log("BROKEN DATA:", { senderId, receiverId, listingId });
+  alert("Invalid message data");
+  return;
+}
+console.log("senderId:", senderId);
+console.log("receiverId:", receiverId);
+console.log("text:", payload.text);
+console.log("listingId:", listingId);
 
   try {
-    const payload = {
-      senderId: user._id,
-      receiverId: item.userId,
-      text: "Hi, I'm interested in your product",
-      listingId: item._id,
-    };
-
-    console.log(payload);
-
     const res = await axios.post(
       "https://business-3-zwsk.onrender.com/send-message",
       payload
     );
 
-    console.log(res.data);
-
-    alert("Message sent!");
+    console.log("SUCCESS:", res.data);
   } catch (err) {
-    console.error(err.response?.data || err.message);
-    alert("Failed to send message");
+    console.log("STATUS:", err.response?.status);
+    console.log("DATA:", err.response?.data);
   }
 };
+
 
   const checkoutWhatsApp = () => {
     if (cart.length === 0) return alert("Cart empty");
@@ -266,7 +281,7 @@ const removeItem = (item) =>
             name="title"
             placeholder="Title"
             value={newTitle}
-            autoComplete="off"
+            autoComplete="on"
 
             onChange={(e) => setNewTitle(e.target.value)}
           />

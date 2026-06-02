@@ -17,7 +17,7 @@ export default function ListingCard({
   const [description, setDescription] = useState(item.description);
   const [price, setPrice] = useState(item.price);
 const [newImage, setNewImage] = useState(null);
-const [messages, setMessages] = useState([]);
+const [Messages, setMessages] = useState([]);
 const [messageText, setMessageText] = useState("");
 
 useEffect(() => {
@@ -52,12 +52,15 @@ useEffect(() => {
 
 useEffect(() => {
   if (user) {
-    socket.emit("join", user._id || user.id);
+    socket.emit("join", user._id );
   }
 }, [user]);
 
 
 const sendMessage = async () => {
+  console.log("item.userId =", item.userId);
+  console.log("ITEM KEYS:", Object.keys(item));
+console.log("FULL ITEM:", JSON.stringify(item, null, 2));
   if (!user) {
     alert("Login first");
     return;
@@ -77,7 +80,12 @@ const sendMessage = async () => {
       text: messageText,
       listingId: item._id,
     };
-
+    console.log("SENDING FROM LISTINGCARD", {
+  senderId: user?._id,
+  receiverId: item?.userId,
+  text: messageText,
+  listingId: item?._id,
+});
     // ONLY use API
     const res = await axios.post(
       "https://business-3-zwsk.onrender.com/send-message",
@@ -90,9 +98,13 @@ const sendMessage = async () => {
     setMessageText("");
 
   } catch (err) {
-    console.error(err);
-    alert("Failed to send message");
-  }
+  console.log("Status:", err.response?.status);
+  console.log("Data:", err.response?.data);
+  console.log("Item:", item);
+  console.log("User:", user);
+
+  alert(JSON.stringify(err.response?.data));
+}
 };
 
   const toggleWishlist = () => {
